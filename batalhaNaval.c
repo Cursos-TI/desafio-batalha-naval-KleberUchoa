@@ -1,40 +1,141 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+int tabuleiro[10][10] = { 
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+};
+
+int navio1[3] = {3, 3, 3};
+int navio2 [4] = {3, 3, 3, 3};
+
+int espacoVazios()
+{   int contador = 0;
+    for(int i = 0; i < 10; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            if(tabuleiro[i][j] == 0)
+                contador++;
+        }
+
+    }
+    return contador;
+}
+
+void ImprimeTabuleiro()
+{
+    for(int i = 0; i < 10; i++)
+    {
+        printf("%d\t", i + 1);
+        for(int j = 0; j < 10; j++)
+        {
+            printf("%d ", tabuleiro[j][i]);
+        }
+        printf("\n");
+    }
+    printf("-\t");
+    char letra = 'A';
+    for (size_t i = 0; i < 10; i++)
+    {
+        printf("%c ", letra);
+        letra++;
+    }
+    
+}
+int ChecaEspacoNaHorizontal(int posX, int posY, int tamanho)
+{
+    if(posX + tamanho < 10)
+    {
+        for(int i = 0; i < tamanho; i++)
+        {
+            if(tabuleiro[posX + i][posY] == 3)
+            {
+                return 0;
+            }
+        }
+    }
+    else return 0;
+
+    return 1; //retorna 1 se houver espaço
+}
+void PoeNavioNaHorizontal(int *navio, int tamanho)
+{
+    int tentativas = 10;
+    
+    int posX = rand() % 10;
+    int posY = rand() % 10;
+    
+    //imprime na horizontal
+    if(ChecaEspacoNaHorizontal(posX, posY, tamanho))
+    {
+        for(int i = 0; i < tamanho; i++)
+        {
+            tabuleiro[posX + i] [posY] = navio[i]; // 3 representa o navio, 0 a água
+        }
+    }else {
+        if(tamanho < espacoVazios() && tentativas > 0)
+        {
+            tentativas--;
+            PoeNavioNaHorizontal(navio, tamanho);
+        }
+        
+     }
+}
+int ChecaEspacoNaVertical(int posX, int posY, int tamanho)
+{
+    if(posY + tamanho < 10)
+    {
+        for(int i = 0; i < tamanho; i++)
+        {
+             if(tabuleiro[posX][posY + i] == 3)
+            {
+                return 0;
+            }
+        }
+    }
+    else return 0;
+    
+    return 1; //retorna 1 se houver espaço
+}
+void PoeNavioNaVertical(int *navio, int tamanho)
+{
+    int tentativas = 10;
+    
+    int posX = rand() % 10;
+    int posY = rand() % 10;
+    
+    //imprime na vertical
+    if(ChecaEspacoNaVertical(posX, posY, tamanho)) //checa se há espaço para o navio a partir da posição gerada aleatoriamente
+    {
+        for(int i = 0; i < tamanho; i++)
+        {
+            //Imprime no tabuleiro, o navio na posição vertical
+            tabuleiro[posX] [posY + i] = navio[i]; // 3 representa o navio, 0 a água
+        }
+    }else {
+        if(tamanho < espacoVazios() && tentativas > 0) //os espaços vazios precisam ser maiores que o navio
+        {
+            tentativas--; //dez tentativas no máximo, evita erro de loop infinito
+            PoeNavioNaVertical(navio, tamanho); //tenta inserir novamente o navio se falhar na primeira tentativa
+        }
+        
+     }
+}
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
-
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
-
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
-
+    srand(time(0)); //Inicia a geração de numeros aleatórios a partir do horário de execução
+    PoeNavioNaHorizontal(navio1, 3);
+    PoeNavioNaVertical (navio2, 4);
+    ImprimeTabuleiro();
     return 0;
 }
