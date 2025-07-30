@@ -21,7 +21,7 @@ int navio1[3] = {3, 3, 3};
 int navio2 [4] = {3, 3, 3, 3};
 int navio3[5] = {3, 3, 3, 3, 3};
 
-int espacoVazios()
+int EspacoVazio()
 {   int contador = 0;
     for(int i = 0; i < TAM; i++)
     {
@@ -57,6 +57,7 @@ void ImprimeTabuleiro()
 }
 int ChecaEspacoNaHorizontal(int posx, int posy, int tamanho)
 {
+    if(tamanho > EspacoVazio()) return 0;
     if(posx + tamanho < TAM)
     {
         for(int i = 0; i < tamanho; i++)
@@ -100,6 +101,7 @@ void PoeNavioNaHorizontal(int *navio, int tamanho)
 }
 int ChecaEspacoNaVertical(int posx, int posy, int tamanho)
 {
+    if(tamanho > EspacoVazio()) return 0;
     if(posy + tamanho < TAM)
     {
         for(int i = 0; i < tamanho; i++)
@@ -143,6 +145,7 @@ void PoeNavioNaVertical(int *navio, int tamanho)
 }
 int ChecaEspacoNaDiagonal(int posx, int posy, int tamanho, int dx, int dy)//dx e dy admite 1 ou -1
 {
+    if(tamanho > EspacoVazio()) return 0;
     int nx = posx;
     int ny = posy;
        
@@ -178,11 +181,6 @@ void PoeNavioNaDiagonal(int *navio, int tamanho, int dx, int dy)
             }
         }
     }
-    
-    
-    
-
-    
 }
 
 int main() {
