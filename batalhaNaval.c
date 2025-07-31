@@ -94,10 +94,7 @@ void PoeNavioNaHorizontal(int *navio, int tamanho)
                 printf("Não foi possível inserio o návio");
         
         }
-    }
-    
-    
-    
+    }    
 }
 int ChecaEspacoNaVertical(int posx, int posy, int tamanho)
 {
@@ -140,8 +137,6 @@ void PoeNavioNaVertical(int *navio, int tamanho)
                 printf("Não foi possível inserir o návio");
         }   
     }
-    
-    
 }
 int ChecaEspacoNaDiagonal(int posx, int posy, int tamanho, int dx, int dy)//dx e dy admite 1 ou -1
 {
@@ -182,15 +177,33 @@ void PoeNavioNaDiagonal(int *navio, int tamanho, int dx, int dy)
         }
     }
 }
-void ImprimeCone()
+int ChecaEspacoParaCone(int posx, int posy)
 {
-    int tentativas = 10;
+    int largura = 1;
+    if(posx + 2 >= 10 || posx - 2 < 0 || posy + 2 >= 10 ) return 0;
+    for(int i = 0; i < 3; i++)
+    {
+        int linha = posx - i;
+        int coluna = posy + i;
+        for(int j = 0; j < largura; j++)
+        {
+            if(linha + j >= TAM || coluna >= TAM || linha + j < 0 || coluna < 0) return 0;
+            //verifica se há espaço vazio
+            if(tabuleiro[linha + j] [coluna] != 0) return 0;
+        }
+        largura += 2;
+    } 
+    return 1;
+}
+void PoeCone()
+{
+    int tentativas = 20;
     while (tentativas-- > 0)
     {
         int posx = rand() % TAM;
         int posy = rand() & TAM;
 
-        if(posx + 2 < 10 && posx - 2 >= 0 && posy + 2 < 10)
+        if(ChecaEspacoParaCone(posx, posy))
         {
             int largura = 1;
             for(int i = 0; i < 3; i++)
@@ -203,18 +216,102 @@ void ImprimeCone()
                 }
                 largura += 2;
             }
-           break;
+            return;
         } 
+        else {
+            if(tentativas == 0)
+                printf("Não foi possível inserir o cone!\n");
+        }
     }
+}
+int ChecaEspacoParaCruz(int posx, int posy)
+{
+    if(posx + 2 >= TAM || posx - 2 < 0 || posy + 2 >= TAM || posy - 2 < 0) return 0;
+    for(int i = -2; i <= 2; i++)
+    {
+        if(tabuleiro[posx + i][posy] != 0) return 0; //verifica a linha
+        if(tabuleiro[posx][posy + i] != 0) return 0; //verifica a coluna
+    }
+    return 1;
+}
+void PoeCruz()
+{
+    int tentativas = 20;
+    while (tentativas-- > 0)
+    {
+        int posx = rand() % TAM;
+        int posy = rand() % TAM;
+
+        if(ChecaEspacoParaCruz(posx, posy))
+        {
+            for(int i = -2; i <= 2; i++)
+            {
+                tabuleiro[posx + i][posy] = 2; //imprime a linha
+                tabuleiro[posx][posy + i] = 2; //imprime a coluna
+            }
+            return; //retorna após imprimir a cruz
+        } else {
+            if(tentativas == 0)
+                printf("Não foi possível inserir a cruz!\n");
+        }
+    }
+}
+int ChecaEspacoParaOctaedro(int posx, int posy)
+{
+    int raio = 3;
+    if(posx + raio >= TAM || posx - raio < 0 || posy + raio >= TAM || posy - raio < 0) return 0;     
     
-    
+    for(int i = -raio; i <= raio; i++)
+    {
+        int largura = raio - abs(i); //largura diminui conforme se afasta do
+        for(int j = 0; j < largura; j++)
+        {
+            if(tabuleiro[posx + i][posy + j] != 0 || tabuleiro[posx + i][posy - j] != 0) //verifica se há espaço vazio
+            {
+                return 0;
+            }
+        }      
+    }
+    return 1;
+}
+void PoeOctaedro()
+{
+    int tentativas = 10;
+    while (tentativas-- >0)
+    {
+        int posx = rand() % TAM;
+        int posy = rand() % TAM;
+
+        if(ChecaEspacoParaCone(posx, posy))
+        {
+            int raio = 3;
+            for(int i = -raio; i <= raio; i++)
+            {
+                int largura = raio - abs(i); //largura diminui conforme se afasta do centro
+                for(int j = 0; j < largura; j++)
+                {
+                    tabuleiro[posx + i][posy + j] = 4; //imprime a parte superior do octaedro
+                    tabuleiro[posx + i][posy - j] = 4; //imprime a parte inferior do octaedro
+                }
+
+            }  
+            
+            return;
+        } 
+        else {
+            if(tentativas == 0)
+                printf("Não foi possível inserir o octaedro!\n");
+        }
+    }
 }
 int main() {
     srand(time(0)); //Inicia a geração de numeros aleatórios a partir do horário de execução
     //PoeNavioNaHorizontal(navio1, 3);
     //PoeNavioNaVertical (navio2, 4);
     //PoeNavioNaDiagonal(navio3, 5, 1, -1);
-    ImprimeCone();
+    PoeOctaedro();
+    PoeCruz();
+    PoeCone();
     ImprimeTabuleiro();
     return 0;
 }
