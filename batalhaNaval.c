@@ -182,12 +182,39 @@ void PoeNavioNaDiagonal(int *navio, int tamanho, int dx, int dy)
         }
     }
 }
+void ImprimeCone()
+{
+    int tentativas = 10;
+    while (tentativas-- > 0)
+    {
+        int posx = rand() % TAM;
+        int posy = rand() & TAM;
 
+        if(posx + 2 < 10 && posx - 2 >= 0 && posy + 2 < 10)
+        {
+            int largura = 1;
+            for(int i = 0; i < 3; i++)
+            {
+                int linha = posx - i;
+                int coluna = posy + i;
+                for(int j = 0; j < largura; j++)
+                {
+                    tabuleiro[linha + j][coluna] = 1;
+                }
+                largura += 2;
+            }
+           break;
+        } 
+    }
+    
+    
+}
 int main() {
     srand(time(0)); //Inicia a geração de numeros aleatórios a partir do horário de execução
-    PoeNavioNaHorizontal(navio1, 3);
-    PoeNavioNaVertical (navio2, 4);
-    PoeNavioNaDiagonal(navio3, 5, 1, -1);
+    //PoeNavioNaHorizontal(navio1, 3);
+    //PoeNavioNaVertical (navio2, 4);
+    //PoeNavioNaDiagonal(navio3, 5, 1, -1);
+    ImprimeCone();
     ImprimeTabuleiro();
     return 0;
 }
