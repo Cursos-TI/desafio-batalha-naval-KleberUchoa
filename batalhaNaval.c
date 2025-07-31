@@ -2,19 +2,21 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define TAM 10
+#define TAM 12
 
 int tabuleiro[TAM][TAM] = { 
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
 
 int navio1[3] = {3, 3, 3};
@@ -180,7 +182,7 @@ void PoeNavioNaDiagonal(int *navio, int tamanho, int dx, int dy)
 int ChecaEspacoParaCone(int posx, int posy)
 {
     int largura = 1;
-    if(posx + 2 >= 10 || posx - 2 < 0 || posy + 2 >= 10 ) return 0;
+    if(posx + 2 >= TAM || posx - 2 < 0 || posy + 2 >= TAM ) return 0;
     for(int i = 0; i < 3; i++)
     {
         int linha = posx - i;
@@ -197,11 +199,11 @@ int ChecaEspacoParaCone(int posx, int posy)
 }
 void PoeCone()
 {
-    int tentativas = 20;
+    int tentativas = 30;
     while (tentativas-- > 0)
     {
         int posx = rand() % TAM;
-        int posy = rand() & TAM;
+        int posy = rand() % TAM;
 
         if(ChecaEspacoParaCone(posx, posy))
         {
@@ -236,7 +238,7 @@ int ChecaEspacoParaCruz(int posx, int posy)
 }
 void PoeCruz()
 {
-    int tentativas = 20;
+    int tentativas = 30;
     while (tentativas-- > 0)
     {
         int posx = rand() % TAM;
@@ -264,9 +266,9 @@ int ChecaEspacoParaOctaedro(int posx, int posy)
     for(int i = -raio; i <= raio; i++)
     {
         int largura = raio - abs(i); //largura diminui conforme se afasta do
-        for(int j = 0; j < largura; j++)
+        for(int j = -largura; j <= largura; j++)
         {
-            if(tabuleiro[posx + i][posy + j] != 0 || tabuleiro[posx + i][posy - j] != 0) //verifica se há espaço vazio
+            if(tabuleiro[posx + i][posy + j]) //verifica se há espaço vazio
             {
                 return 0;
             }
@@ -276,7 +278,7 @@ int ChecaEspacoParaOctaedro(int posx, int posy)
 }
 void PoeOctaedro()
 {
-    int tentativas = 10;
+    int tentativas = 30;
     while (tentativas-- >0)
     {
         int posx = rand() % TAM;
@@ -309,9 +311,9 @@ int main() {
     //PoeNavioNaHorizontal(navio1, 3);
     //PoeNavioNaVertical (navio2, 4);
     //PoeNavioNaDiagonal(navio3, 5, 1, -1);
-    PoeOctaedro();
-    PoeCruz();
     PoeCone();
+    PoeCruz();
+    PoeOctaedro();
     ImprimeTabuleiro();
     return 0;
 }
