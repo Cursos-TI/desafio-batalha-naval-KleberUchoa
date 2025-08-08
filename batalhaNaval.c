@@ -266,13 +266,10 @@ int ChecaEspacoParaOctaedro(int posx, int posy)
     for(int i = -raio; i <= raio; i++)
     {
         int largura = raio - abs(i); //largura diminui conforme se afasta do
-        for(int j = -largura; j <= largura; j++)
+        for(int j = 0; j < largura; j++)
         {
-            if(tabuleiro[posx + i][posy + j]) //verifica se há espaço vazio
-            {
-                return 0;
-            }
-        }      
+            if(tabuleiro[posx + i][posy + j]|| tabuleiro[posx + i][posy - j]) return 0;
+        } 
     }
     return 1;
 }
@@ -308,9 +305,9 @@ void PoeOctaedro()
 }
 int main() {
     srand(time(0)); //Inicia a geração de numeros aleatórios a partir do horário de execução
-    //PoeNavioNaHorizontal(navio1, 3);
-    //PoeNavioNaVertical (navio2, 4);
-    //PoeNavioNaDiagonal(navio3, 5, 1, -1);
+    PoeNavioNaHorizontal(navio1, 3);
+    PoeNavioNaVertical (navio2, 4);
+    PoeNavioNaDiagonal(navio3, 5, 1, -1);
     PoeCone();
     PoeCruz();
     PoeOctaedro();
